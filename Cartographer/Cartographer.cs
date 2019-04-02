@@ -21,7 +21,6 @@ namespace Cartographer
         private BlockingCollection<LogMessage> _loggerQueue = new BlockingCollection<LogMessage>();
         private Task _loggerTask;
         private Printer _printer;
-        private StackTrace _stack;
 
         /// <summary>
         /// Sets up a new Cartographer to log anything. Spawns a new task in the background.
@@ -33,45 +32,49 @@ namespace Cartographer
             _filepath = filepath;
             SetupLogFile(filepath);
             _printer = new Printer(_loggerQueue, _filepath);
-            
+
             _loggerTask = Task.Factory.StartNew(() =>
             {
                 _printer.QueueChecker();
             });
-
-            _stack = new StackTrace();
         }
-
-        
 
         /// <inheritdoc />
         public void Log(string message, LoggingLevel loggingLevel)
         {
-            var member = _stack.GetFrame(1).GetMethod().Name;
-            _loggerQueue.TryAdd(new LogMessage(message, loggingLevel, member));
+            var stack = new StackTrace();
+            var callerClass = stack.GetFrame(1).GetMethod().DeclaringType.FullName;
+            var callerMethod = stack.GetFrame(1).GetMethod().Name;
+            _loggerQueue.TryAdd(new LogMessage(message, loggingLevel, callerClass, callerMethod));
         }
 
         /// <inheritdoc />
         public void Log(string[] messages, LoggingLevel loggingLevel)
         {
-            var member = _stack.GetFrame(1).GetMethod().Name;
-            _loggerQueue.TryAdd(new LogMessage(messages, loggingLevel, member));
+            var stack = new StackTrace();
+            var callerClass = stack.GetFrame(1).GetMethod().DeclaringType.FullName;
+            var callerMethod = stack.GetFrame(1).GetMethod().Name;
+            _loggerQueue.TryAdd(new LogMessage(messages, loggingLevel, callerClass, callerMethod));
         }
 
         /// <inheritdoc />
         public void Log(string message, LoggingLevel loggingLevel, Exception ex)
         {
-            var member = _stack.GetFrame(1).GetMethod().Name;
-            _loggerQueue.TryAdd(new LogMessage(message, loggingLevel, ex, member));
+            var stack = new StackTrace();
+            var callerClass = stack.GetFrame(1).GetMethod().DeclaringType.FullName;
+            var callerMethod = stack.GetFrame(1).GetMethod().Name;
+            _loggerQueue.TryAdd(new LogMessage(message, loggingLevel, ex, callerClass, callerMethod));
         }
 
         /// <inheritdoc />
         public void Log(string[] messages, LoggingLevel loggingLevel, Exception ex)
         {
-            var member = _stack.GetFrame(1).GetMethod().Name;
-            _loggerQueue.TryAdd(new LogMessage(messages, loggingLevel, ex, member));
+            var stack = new StackTrace();
+            var callerClass = stack.GetFrame(1).GetMethod().DeclaringType.FullName;
+            var callerMethod = stack.GetFrame(1).GetMethod().Name;
+            _loggerQueue.TryAdd(new LogMessage(messages, loggingLevel, ex, callerClass, callerMethod));
         }
-        
+
         /// <inheritdoc />
         public TaskStatus Status()
         {
@@ -83,23 +86,11 @@ namespace Cartographer
             // seperate file from path
             var file = filepath.Split('\\').Last();
             var dir = filepath.Substring(0, filepath.Length - file.Length);
-
-            if (!File.Exists(filepath))
+            
+            // check for dir
+            if (!Directory.Exists(dir))
             {
-                // check for dir
-                if (!Directory.Exists(dir))
-                {
-                    Directory.CreateDirectory(filepath);
-                }
-
-                try
-                {
-                    File.Create(filepath);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Cartographer failed to create log file: " + ex.Message);
-                }
+                Directory.CreateDirectory(dir);
             }
         }
     }

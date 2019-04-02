@@ -43,9 +43,10 @@ namespace Cartographer
         {
             var logMessage =
                 $"{messageObject.Time.ToShortDateString()}, " +
-                $"{messageObject.Time.TimeOfDay}, " +
-                $"{messageObject.Level}, " +
-                $"{messageObject.Caller}" +
+                $"{messageObject.Time.TimeOfDay}\t" +
+                $"{messageObject.Level}\t" +
+                $"{messageObject.CallerClass}\t" +
+                $"{messageObject.CallerMethod}\t" +
                 $"{string.Join(", ", messageObject.Messages)}";
 
             if (messageObject.Ex != null)
