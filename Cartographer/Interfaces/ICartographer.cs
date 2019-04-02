@@ -44,12 +44,5 @@ namespace Cartographer.Interfaces
         /// </summary>
         /// <returns>The TaskStatus of the logger task.</returns>
         TaskStatus Status();
-
-
-        /// <summary>
-        /// Gets the cartographer task.
-        /// </summary>
-        /// <returns>The task running in the background.</returns>
-        Task GetTask();
     }
 }
