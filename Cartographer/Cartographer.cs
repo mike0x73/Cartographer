@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Collections.Concurrent;
 using Cartographer.Interfaces;
 using Cartographer.Messages;
+using System.Diagnostics;
 
 namespace Cartographer
 {
@@ -20,6 +21,7 @@ namespace Cartographer
         private BlockingCollection<LogMessage> _loggerQueue = new BlockingCollection<LogMessage>();
         private Task _loggerTask;
         private Printer _printer;
+        private StackTrace _stack;
 
         /// <summary>
         /// Sets up a new Cartographer to log anything. Spawns a new task in the background.
@@ -36,30 +38,38 @@ namespace Cartographer
             {
                 _printer.QueueChecker();
             });
+
+            _stack = new StackTrace();
         }
+
+        
 
         /// <inheritdoc />
         public void Log(string message, LoggingLevel loggingLevel)
         {
-            _loggerQueue.TryAdd(new LogMessage(message, loggingLevel));
+            var member = _stack.GetFrame(1).GetMethod().Name;
+            _loggerQueue.TryAdd(new LogMessage(message, loggingLevel, member));
         }
 
         /// <inheritdoc />
         public void Log(string[] messages, LoggingLevel loggingLevel)
         {
-            _loggerQueue.TryAdd(new LogMessage(messages, loggingLevel));
+            var member = _stack.GetFrame(1).GetMethod().Name;
+            _loggerQueue.TryAdd(new LogMessage(messages, loggingLevel, member));
         }
 
         /// <inheritdoc />
         public void Log(string message, LoggingLevel loggingLevel, Exception ex)
         {
-            _loggerQueue.TryAdd(new LogMessage(message, loggingLevel, ex));
+            var member = _stack.GetFrame(1).GetMethod().Name;
+            _loggerQueue.TryAdd(new LogMessage(message, loggingLevel, ex, member));
         }
 
         /// <inheritdoc />
         public void Log(string[] messages, LoggingLevel loggingLevel, Exception ex)
         {
-            _loggerQueue.TryAdd(new LogMessage(messages, loggingLevel, ex));
+            var member = _stack.GetFrame(1).GetMethod().Name;
+            _loggerQueue.TryAdd(new LogMessage(messages, loggingLevel, ex, member));
         }
         
         /// <inheritdoc />
@@ -92,7 +102,5 @@ namespace Cartographer
                 }
             }
         }
-
-        
     }
 }

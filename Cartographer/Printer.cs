@@ -7,6 +7,9 @@ using System.Text;
 
 namespace Cartographer
 {
+    /// <summary>
+    /// I bloody hate printers irl.
+    /// </summary>
     internal class Printer
     {
         private BlockingCollection<LogMessage> _loggerQueue;
@@ -42,6 +45,7 @@ namespace Cartographer
                 $"{messageObject.Time.ToShortDateString()}, " +
                 $"{messageObject.Time.TimeOfDay}, " +
                 $"{messageObject.Level}, " +
+                $"{messageObject.Caller}" +
                 $"{string.Join(", ", messageObject.Messages)}";
 
             if (messageObject.Ex != null)

@@ -6,44 +6,50 @@ namespace Cartographer.Messages
 {
     internal class LogMessage
     {
-        public LogMessage(string message, LoggingLevel loggingLevel)
+        internal LogMessage(string message, LoggingLevel loggingLevel, string callerMember)
         {
             Messages = new string[1];
             Messages[0] = message;
             Level = loggingLevel;
             Time = DateTime.UtcNow;
+            Caller = callerMember;
         }
 
-        public LogMessage(string[] messages, LoggingLevel loggingLevel)
+        internal LogMessage(string[] messages, LoggingLevel loggingLevel, string callerMember)
         {
             Messages = messages;
             Level = loggingLevel;
             Time = DateTime.UtcNow;
+            Caller = callerMember;
         }
 
-        public LogMessage(string message, LoggingLevel loggingLevel, Exception ex)
+        internal LogMessage(string message, LoggingLevel loggingLevel, Exception ex, string callerMember)
         {
             Messages = new string[1];
             Messages[0] = message;
             Level = loggingLevel;
             Ex = ex;
             Time = DateTime.UtcNow;
+            Caller = callerMember;
         }
 
-        public LogMessage(string[] messages, LoggingLevel loggingLevel, Exception ex)
+        internal LogMessage(string[] messages, LoggingLevel loggingLevel, Exception ex, string callerMember)
         {
             Messages = messages;
             Level = loggingLevel;
             Ex = ex;
             Time = DateTime.UtcNow;
+            Caller = callerMember;
         }
 
-        public string[] Messages { get; }
+        internal string[] Messages { get; }
 
-        public LoggingLevel Level { get; }
+        internal LoggingLevel Level { get; }
 
-        public Exception Ex { get; } = null;
+        internal Exception Ex { get; } = null;
 
-        public DateTime Time { get; }
+        internal DateTime Time { get; }
+
+        internal string Caller { get; }
     }
 }
