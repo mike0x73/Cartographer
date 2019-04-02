@@ -16,10 +16,10 @@ namespace Cartographer
     /// </summary>
     public class Cartographer : ICartographer
     {
-        private StreamWriter _logWriter;
         private readonly string _filepath;
         private BlockingCollection<LogMessage> _loggerQueue = new BlockingCollection<LogMessage>();
         private Task _loggerTask;
+        private Printer _printer;
 
         /// <summary>
         /// Sets up a new Cartographer to log anything. Spawns a new task in the background.
@@ -30,14 +30,11 @@ namespace Cartographer
         {
             _filepath = filepath;
             SetupLogFile(filepath);
-            _logWriter = new StreamWriter(_filepath, true)
-            {
-                AutoFlush = true
-            };
-
+            _printer = new Printer(_loggerQueue, _filepath);
+            
             _loggerTask = Task.Factory.StartNew(() =>
             {
-                QueueChecker();
+                _printer.QueueChecker();
             });
         }
 
@@ -53,26 +50,22 @@ namespace Cartographer
             _loggerQueue.TryAdd(new LogMessage(messages, loggingLevel));
         }
 
+        /// <inheritdoc />
         public void Log(string message, LoggingLevel loggingLevel, Exception ex)
         {
             _loggerQueue.TryAdd(new LogMessage(message, loggingLevel, ex));
         }
 
-        public void Log(string[] message, LoggingLevel loggingLevel, Exception ex)
+        /// <inheritdoc />
+        public void Log(string[] messages, LoggingLevel loggingLevel, Exception ex)
         {
-            _loggerQueue.TryAdd(new LogMessage(message, loggingLevel, ex));
+            _loggerQueue.TryAdd(new LogMessage(messages, loggingLevel, ex));
         }
         
         /// <inheritdoc />
         public TaskStatus Status()
         {
             return _loggerTask.Status;
-        }
-
-        /// <inheritdoc />
-        public Task GetTask()
-        {
-            return _loggerTask;
         }
 
         private void SetupLogFile(string filepath)
@@ -86,14 +79,7 @@ namespace Cartographer
                 // check for dir
                 if (!Directory.Exists(dir))
                 {
-                    try
-                    {
-                        Directory.CreateDirectory(filepath);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("Cartographer failed to create directory to log file: " + ex.Message);
-                    }
+                    Directory.CreateDirectory(filepath);
                 }
 
                 try
@@ -107,34 +93,6 @@ namespace Cartographer
             }
         }
 
-        private LogMessage GetOldestLogMessage()
-        {
-            var message = _loggerQueue.Take();
-            return message;
-        }
-
-        private void QueueChecker()
-        {
-            while (true)
-            {
-                LogMessage(GetOldestLogMessage());
-            }
-        }
-
-        private void LogMessage(LogMessage messageObject)
-        {
-            var logMessage =
-                $"{messageObject.Time.ToShortDateString()}, " +
-                $"{messageObject.Time.TimeOfDay}, " +
-                $"{messageObject.Level}, " +
-                $"{string.Join(", ", messageObject.Messages)}";
-
-            if (messageObject.Ex != null)
-            {
-                logMessage += "\n\t" + messageObject.Ex.StackTrace;
-            }
-
-            _logWriter.WriteLine(logMessage);
-        }
+        
     }
 }

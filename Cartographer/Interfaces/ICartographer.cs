@@ -9,16 +9,35 @@ namespace Cartographer.Interfaces
     public interface ICartographer
     {
         /// <summary>
-        /// Adds a message to the logger queue
+        /// Prints a log message.
         /// </summary>
-        /// <param name="message">The log message to add to the queue.</param>
+        /// <param name="message">The message to log.</param>
+        /// <param name="loggingLevel">The logging level of the message</param>
         void Log(string message, LoggingLevel loggingLevel);
 
         /// <summary>
-        /// Adds an array of messages to the logger queue
+        /// Prints a log message that contains several messages.
         /// </summary>
-        /// <param name="message">The log message to add to the queue.</param>
-        void Log(string[] message, LoggingLevel loggingLevel);
+        /// <param name="messages">The messages to log.</param>
+        /// <param name="loggingLevel">The logging level of the message.</param>
+        void Log(string[] messages, LoggingLevel loggingLevel);
+
+        /// <summary>
+        /// Prints a log message with an exception stack trace.
+        /// </summary>
+        /// <param name="message">The message to log.</param>
+        /// <param name="loggingLevel">The logging level of the message.</param>
+        /// <param name="ex">The exception to log.</param>
+        void Log(string message, LoggingLevel loggingLevel, Exception ex);
+
+
+        /// <summary>
+        /// Prints a log message that contains several messages with an exception stack trace.
+        /// </summary>
+        /// <param name="messages">The messages to log.</param>
+        /// <param name="loggingLevel">The logging level of the message.</param>
+        /// <param name="ex">The exception to log.</param>
+        void Log(string[] messages, LoggingLevel loggingLevel, Exception ex);
 
         /// <summary>
         /// Gets the current status of the logger task.

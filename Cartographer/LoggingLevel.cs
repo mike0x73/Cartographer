@@ -13,4 +13,3 @@ namespace Cartographer
         Fatal = 4
     }
 }
-

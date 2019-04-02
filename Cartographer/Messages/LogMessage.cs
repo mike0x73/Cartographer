@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Cartographer.Messages
 {
-    public class LogMessage
+    internal class LogMessage
     {
         public LogMessage(string message, LoggingLevel loggingLevel)
         {
