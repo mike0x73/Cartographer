@@ -11,7 +11,7 @@ namespace Cartographer
     {
         private BlockingCollection<LogMessage> _loggerQueue;
         private StreamWriter _logWriter;
-        private bool _printToConsole;
+        private readonly bool _printToConsole;
         
         public Printer(BlockingCollection<LogMessage> loggerQueue, string filepath, bool printToConsole)
         {
