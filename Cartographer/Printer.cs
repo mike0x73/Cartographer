@@ -7,18 +7,16 @@ using System.Text;
 
 namespace Cartographer
 {
-    /// <summary>
-    /// I bloody hate printers irl.
-    /// </summary>
     internal class Printer
     {
         private BlockingCollection<LogMessage> _loggerQueue;
         private StreamWriter _logWriter;
-
-
-        public Printer(BlockingCollection<LogMessage> loggerQueue, string filepath)
+        private bool _printToConsole;
+        
+        public Printer(BlockingCollection<LogMessage> loggerQueue, string filepath, bool printToConsole)
         {
             _loggerQueue = loggerQueue;
+            _printToConsole = printToConsole;
             _logWriter = new StreamWriter(filepath, true)
             {
                 AutoFlush = true
@@ -44,10 +42,27 @@ namespace Cartographer
             var logMessage =
                 $"{messageObject.Time.ToShortDateString()}, " +
                 $"{messageObject.Time.TimeOfDay}\t" +
-                $"{messageObject.Level}\t" +
-                $"{messageObject.CallerClass}\t" +
-                $"{messageObject.CallerMethod}\t" +
-                $"{string.Join(", ", messageObject.Messages)}";
+                $"{messageObject.Level}\t";
+
+            if (messageObject.CallerClass != null)
+            {
+                logMessage += $"{messageObject.CallerClass}\t";
+            }
+            
+            if (messageObject.CallerMethod != null)
+            {
+                logMessage += $"{messageObject.CallerMethod}\t";
+            }
+
+            if (messageObject.LineNumber != null)
+            {
+                logMessage += $"{messageObject.LineNumber}\t";
+            }
+
+            if (messageObject.Messages != null)
+            {
+                logMessage += $"{string.Join(", ", messageObject.Messages)}";
+            }                
 
             if (messageObject.Ex != null)
             {
@@ -55,6 +70,11 @@ namespace Cartographer
             }
 
             _logWriter.WriteLine(logMessage);
+
+            if (_printToConsole)
+            {
+                Console.WriteLine(logMessage);
+            }
         }
     }
 }

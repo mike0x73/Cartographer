@@ -22,6 +22,10 @@ namespace Cartographer
         private Task _loggerTask;
         private Printer _printer;
 
+        public bool PrintToConsole { get; set; } = false;
+        public LoggingLevel LoggingLevelToPrint { get; set; } = LoggingLevel.Trace;
+        public bool PrintContextData { get; set; } = true;
+                
         /// <summary>
         /// Sets up a new Cartographer to log anything. Spawns a new task in the background.
         /// It will try to create any directories and the log file if it does not already exist.
@@ -31,7 +35,7 @@ namespace Cartographer
         {
             _filepath = filepath;
             SetupLogFile(filepath);
-            _printer = new Printer(_loggerQueue, _filepath);
+            _printer = new Printer(_loggerQueue, _filepath, PrintToConsole);
 
             _loggerTask = Task.Factory.StartNew(() =>
             {
@@ -42,37 +46,97 @@ namespace Cartographer
         /// <inheritdoc />
         public void Log(string message, LoggingLevel loggingLevel)
         {
-            var stack = new StackTrace();
-            var callerClass = stack.GetFrame(1).GetMethod().DeclaringType.FullName;
-            var callerMethod = stack.GetFrame(1).GetMethod().Name;
-            _loggerQueue.TryAdd(new LogMessage(message, loggingLevel, callerClass, callerMethod));
+            if (loggingLevel < LoggingLevelToPrint)
+            {
+                return;
+            }
+
+            string callerClass = null;
+            string callerMethod = null;
+            int? callerLineNumber = null;
+
+            if (PrintContextData)
+            {
+                var stack = new StackTrace();
+                var stackFrame = stack.GetFrame(1);
+                callerClass = stackFrame.GetMethod().DeclaringType.FullName;
+                callerMethod = stackFrame.GetMethod().Name;
+                callerLineNumber = stackFrame.GetFileLineNumber();
+            }
+            
+            _loggerQueue.TryAdd(new LogMessage(message, loggingLevel, callerClass, callerMethod, callerLineNumber));
         }
 
         /// <inheritdoc />
         public void Log(string[] messages, LoggingLevel loggingLevel)
         {
-            var stack = new StackTrace();
-            var callerClass = stack.GetFrame(1).GetMethod().DeclaringType.FullName;
-            var callerMethod = stack.GetFrame(1).GetMethod().Name;
-            _loggerQueue.TryAdd(new LogMessage(messages, loggingLevel, callerClass, callerMethod));
+            if (loggingLevel < LoggingLevelToPrint)
+            {
+                return;
+            }
+
+            string callerClass = null;
+            string callerMethod = null;
+            int? callerLineNumber = null;
+
+            if (PrintContextData)
+            {
+                var stack = new StackTrace();
+                var stackFrame = stack.GetFrame(1);
+                callerClass = stackFrame.GetMethod().DeclaringType.FullName;
+                callerMethod = stackFrame.GetMethod().Name;
+                callerLineNumber = stackFrame.GetFileLineNumber();
+            }
+
+            _loggerQueue.TryAdd(new LogMessage(messages, loggingLevel, callerClass, callerMethod, callerLineNumber));
         }
 
         /// <inheritdoc />
         public void Log(string message, LoggingLevel loggingLevel, Exception ex)
         {
-            var stack = new StackTrace();
-            var callerClass = stack.GetFrame(1).GetMethod().DeclaringType.FullName;
-            var callerMethod = stack.GetFrame(1).GetMethod().Name;
-            _loggerQueue.TryAdd(new LogMessage(message, loggingLevel, ex, callerClass, callerMethod));
+            if (loggingLevel < LoggingLevelToPrint)
+            {
+                return;
+            }
+
+            string callerClass = null;
+            string callerMethod = null;
+            int? callerLineNumber = null;
+
+            if (PrintContextData)
+            {
+                var stack = new StackTrace();
+                var stackFrame = stack.GetFrame(1);
+                callerClass = stackFrame.GetMethod().DeclaringType.FullName;
+                callerMethod = stackFrame.GetMethod().Name;
+                callerLineNumber = stackFrame.GetFileLineNumber();
+            }
+
+            _loggerQueue.TryAdd(new LogMessage(message, loggingLevel, ex, callerClass, callerMethod, callerLineNumber));
         }
 
         /// <inheritdoc />
         public void Log(string[] messages, LoggingLevel loggingLevel, Exception ex)
         {
-            var stack = new StackTrace();
-            var callerClass = stack.GetFrame(1).GetMethod().DeclaringType.FullName;
-            var callerMethod = stack.GetFrame(1).GetMethod().Name;
-            _loggerQueue.TryAdd(new LogMessage(messages, loggingLevel, ex, callerClass, callerMethod));
+            if (loggingLevel < LoggingLevelToPrint)
+            {
+                return;
+            }
+
+            string callerClass = null;
+            string callerMethod = null;
+            int? callerLineNumber = null;
+
+            if (PrintContextData)
+            {
+                var stack = new StackTrace();
+                var stackFrame = stack.GetFrame(1);
+                callerClass = stackFrame.GetMethod().DeclaringType.FullName;
+                callerMethod = stackFrame.GetMethod().Name;
+                callerLineNumber = stackFrame.GetFileLineNumber();
+            }
+
+            _loggerQueue.TryAdd(new LogMessage(messages, loggingLevel, ex, callerClass, callerMethod, callerLineNumber));
         }
 
         /// <inheritdoc />
