@@ -22,8 +22,13 @@ namespace Cartographer
         private Task _loggerTask;
         private Printer _printer;
 
+        /// <inheritdoc />
         public bool PrintToConsole { get; set; } = false;
+
+        /// <inheritdoc />
         public LoggingLevel LoggingLevelToPrint { get; set; } = LoggingLevel.Trace;
+
+        /// <inheritdoc />
         public bool PrintContextData { get; set; } = true;
                 
         /// <summary>
