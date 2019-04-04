@@ -44,6 +44,11 @@ namespace Cartographer
                 $"{messageObject.Time.TimeOfDay}\t" +
                 $"{messageObject.Level}\t";
 
+            if (messageObject.ThreadId != null)
+            {
+                logMessage += $"{messageObject.ThreadId}\t";
+            }
+
             if (messageObject.CallerClass != null)
             {
                 logMessage += $"{messageObject.CallerClass}\t";

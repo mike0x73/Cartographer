@@ -8,6 +8,7 @@ using System.Collections.Concurrent;
 using Cartographer.Interfaces;
 using Cartographer.Messages;
 using System.Diagnostics;
+using System.Threading;
 
 namespace Cartographer
 {
@@ -53,6 +54,7 @@ namespace Cartographer
             string callerClass = null;
             string callerMethod = null;
             int? callerLineNumber = null;
+            int? threadId = null;
 
             if (PrintContextData)
             {
@@ -61,9 +63,10 @@ namespace Cartographer
                 callerClass = stackFrame.GetMethod().DeclaringType.FullName;
                 callerMethod = stackFrame.GetMethod().Name;
                 callerLineNumber = stackFrame.GetFileLineNumber();
+                threadId = Thread.CurrentThread.ManagedThreadId;
             }
             
-            _loggerQueue.TryAdd(new LogMessage(message, loggingLevel, callerClass, callerMethod, callerLineNumber));
+            _loggerQueue.TryAdd(new LogMessage(message, loggingLevel, callerClass, callerMethod, callerLineNumber, threadId));
         }
 
         /// <inheritdoc />
@@ -77,6 +80,7 @@ namespace Cartographer
             string callerClass = null;
             string callerMethod = null;
             int? callerLineNumber = null;
+            int? threadId = null;
 
             if (PrintContextData)
             {
@@ -85,9 +89,10 @@ namespace Cartographer
                 callerClass = stackFrame.GetMethod().DeclaringType.FullName;
                 callerMethod = stackFrame.GetMethod().Name;
                 callerLineNumber = stackFrame.GetFileLineNumber();
+                threadId = Thread.CurrentThread.ManagedThreadId;
             }
 
-            _loggerQueue.TryAdd(new LogMessage(messages, loggingLevel, callerClass, callerMethod, callerLineNumber));
+            _loggerQueue.TryAdd(new LogMessage(messages, loggingLevel, callerClass, callerMethod, callerLineNumber, threadId));
         }
 
         /// <inheritdoc />
@@ -101,6 +106,7 @@ namespace Cartographer
             string callerClass = null;
             string callerMethod = null;
             int? callerLineNumber = null;
+            int? threadId = null;
 
             if (PrintContextData)
             {
@@ -109,9 +115,10 @@ namespace Cartographer
                 callerClass = stackFrame.GetMethod().DeclaringType.FullName;
                 callerMethod = stackFrame.GetMethod().Name;
                 callerLineNumber = stackFrame.GetFileLineNumber();
+                threadId = Thread.CurrentThread.ManagedThreadId;
             }
 
-            _loggerQueue.TryAdd(new LogMessage(message, loggingLevel, ex, callerClass, callerMethod, callerLineNumber));
+            _loggerQueue.TryAdd(new LogMessage(message, loggingLevel, ex, callerClass, callerMethod, callerLineNumber, threadId));
         }
 
         /// <inheritdoc />
@@ -125,6 +132,7 @@ namespace Cartographer
             string callerClass = null;
             string callerMethod = null;
             int? callerLineNumber = null;
+            int? threadId = null;
 
             if (PrintContextData)
             {
@@ -133,9 +141,10 @@ namespace Cartographer
                 callerClass = stackFrame.GetMethod().DeclaringType.FullName;
                 callerMethod = stackFrame.GetMethod().Name;
                 callerLineNumber = stackFrame.GetFileLineNumber();
+                threadId = Thread.CurrentThread.ManagedThreadId;
             }
 
-            _loggerQueue.TryAdd(new LogMessage(messages, loggingLevel, ex, callerClass, callerMethod, callerLineNumber));
+            _loggerQueue.TryAdd(new LogMessage(messages, loggingLevel, ex, callerClass, callerMethod, callerLineNumber, threadId));
         }
 
         /// <inheritdoc />

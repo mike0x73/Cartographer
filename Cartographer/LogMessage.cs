@@ -6,7 +6,7 @@ namespace Cartographer.Messages
 {
     internal class LogMessage
     {
-        internal LogMessage(string message, LoggingLevel loggingLevel, string classMember, string callerMember, int? lineNumber)
+        internal LogMessage(string message, LoggingLevel loggingLevel, string classMember, string callerMember, int? lineNumber, int? threadId)
         {
             Messages = new string[1];
             Messages[0] = message;
@@ -15,9 +15,10 @@ namespace Cartographer.Messages
             CallerClass = classMember;
             CallerMethod = callerMember;
             LineNumber = lineNumber;
+            ThreadId = threadId;
         }
 
-        internal LogMessage(string[] messages, LoggingLevel loggingLevel, string classMember, string callerMember, int? lineNumber)
+        internal LogMessage(string[] messages, LoggingLevel loggingLevel, string classMember, string callerMember, int? lineNumber, int? threadId)
         {
             Messages = messages;
             Level = loggingLevel;
@@ -25,9 +26,10 @@ namespace Cartographer.Messages
             CallerClass = classMember;
             CallerMethod = callerMember;
             LineNumber = lineNumber;
+            ThreadId = threadId;
         }
 
-        internal LogMessage(string message, LoggingLevel loggingLevel, Exception ex, string classMember, string callerMember, int? lineNumber)
+        internal LogMessage(string message, LoggingLevel loggingLevel, Exception ex, string classMember, string callerMember, int? lineNumber, int? threadId)
         {
             Messages = new string[1];
             Messages[0] = message;
@@ -37,9 +39,10 @@ namespace Cartographer.Messages
             CallerClass = classMember;
             CallerMethod = callerMember;
             LineNumber = lineNumber;
+            ThreadId = threadId;
         }
 
-        internal LogMessage(string[] messages, LoggingLevel loggingLevel, Exception ex, string classMember, string callerMember, int? lineNumber)
+        internal LogMessage(string[] messages, LoggingLevel loggingLevel, Exception ex, string classMember, string callerMember, int? lineNumber, int? threadId)
         {
             Messages = messages;
             Level = loggingLevel;
@@ -48,6 +51,7 @@ namespace Cartographer.Messages
             CallerClass = classMember;
             CallerMethod = callerMember;
             LineNumber = lineNumber;
+            ThreadId = threadId;
         }
 
         internal string[] Messages { get; }
@@ -63,5 +67,7 @@ namespace Cartographer.Messages
         internal string CallerMethod { get; }  
 
         internal int? LineNumber { get; }
+
+        internal int? ThreadId { get; }
     }
 }

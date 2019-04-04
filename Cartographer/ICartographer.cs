@@ -9,6 +9,21 @@ namespace Cartographer.Interfaces
     public interface ICartographer
     {
         /// <summary>
+        /// Gets and sets whether to print logging to console (default = false).
+        /// </summary>
+        bool PrintToConsole { get; set; }
+        
+        /// <summary>
+        /// Gets and sets what minimum logging level to print (default = Trace).
+        /// </summary>
+        LoggingLevel LoggingLevelToPrint { get; set; }
+        
+        /// <summary>
+        /// Gets and sets whether to gather context data. Turn off for faster logging (default = true).
+        /// </summary>
+        bool PrintContextData { get; set; }
+
+        /// <summary>
         /// Prints a log message.
         /// </summary>
         /// <param name="message">The message to log.</param>
