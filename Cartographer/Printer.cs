@@ -1,5 +1,4 @@
-﻿using Cartographer.Messages;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
@@ -11,12 +10,12 @@ namespace Cartographer
     {
         private BlockingCollection<LogMessage> _loggerQueue;
         private StreamWriter _logWriter;
-        private readonly bool _printToConsole;
+        private readonly Cartographer _cartographer;
         
-        public Printer(BlockingCollection<LogMessage> loggerQueue, string filepath, bool printToConsole)
+        public Printer(Cartographer cartographer, BlockingCollection<LogMessage> loggerQueue, string filepath)
         {
             _loggerQueue = loggerQueue;
-            _printToConsole = printToConsole;
+            _cartographer = cartographer;
             _logWriter = new StreamWriter(filepath, true)
             {
                 AutoFlush = true
@@ -76,7 +75,7 @@ namespace Cartographer
 
             _logWriter.WriteLine(logMessage);
 
-            if (_printToConsole)
+            if (_cartographer.PrintToConsole)
             {
                 Console.WriteLine(logMessage);
             }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Cartographer.Messages
+namespace Cartographer
 {
     internal class LogMessage
     {

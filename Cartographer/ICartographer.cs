@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cartographer.Interfaces
+namespace Cartographer
 {
     public interface ICartographer
     {

@@ -5,15 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
-using Cartographer.Interfaces;
-using Cartographer.Messages;
 using System.Diagnostics;
 using System.Threading;
 
 namespace Cartographer
 {
     /// <summary>
-    /// Creates a logger and logger queue for the program. The file directory setup depends on computer OS.
+    /// Creates a logger and logger queue for the program.
     /// </summary>
     public class Cartographer : ICartographer
     {
@@ -30,7 +28,7 @@ namespace Cartographer
 
         /// <inheritdoc />
         public bool PrintContextData { get; set; } = true;
-                
+
         /// <summary>
         /// Sets up a new Cartographer to log anything. Spawns a new task in the background.
         /// It will try to create any directories and the log file if it does not already exist.
@@ -40,12 +38,14 @@ namespace Cartographer
         {
             _filepath = filepath;
             SetupLogFile(filepath);
-            _printer = new Printer(_loggerQueue, _filepath, PrintToConsole);
+            _printer = new Printer(this, _loggerQueue, _filepath);
 
             _loggerTask = Task.Factory.StartNew(() =>
             {
                 _printer.QueueChecker();
             });
+
+
         }
 
         /// <inheritdoc />
@@ -63,14 +63,13 @@ namespace Cartographer
 
             if (PrintContextData)
             {
-                var stack = new StackTrace();
-                var stackFrame = stack.GetFrame(1);
+                var stackFrame = new StackTrace(true).GetFrame(1);
                 callerClass = stackFrame.GetMethod().DeclaringType.FullName;
                 callerMethod = stackFrame.GetMethod().Name;
                 callerLineNumber = stackFrame.GetFileLineNumber();
                 threadId = Thread.CurrentThread.ManagedThreadId;
             }
-            
+
             _loggerQueue.TryAdd(new LogMessage(message, loggingLevel, callerClass, callerMethod, callerLineNumber, threadId));
         }
 
@@ -89,8 +88,7 @@ namespace Cartographer
 
             if (PrintContextData)
             {
-                var stack = new StackTrace();
-                var stackFrame = stack.GetFrame(1);
+                var stackFrame = new StackTrace(true).GetFrame(1);
                 callerClass = stackFrame.GetMethod().DeclaringType.FullName;
                 callerMethod = stackFrame.GetMethod().Name;
                 callerLineNumber = stackFrame.GetFileLineNumber();
@@ -115,8 +113,7 @@ namespace Cartographer
 
             if (PrintContextData)
             {
-                var stack = new StackTrace();
-                var stackFrame = stack.GetFrame(1);
+                var stackFrame = new StackTrace(ex, true).GetFrame(1);
                 callerClass = stackFrame.GetMethod().DeclaringType.FullName;
                 callerMethod = stackFrame.GetMethod().Name;
                 callerLineNumber = stackFrame.GetFileLineNumber();
@@ -141,8 +138,7 @@ namespace Cartographer
 
             if (PrintContextData)
             {
-                var stack = new StackTrace();
-                var stackFrame = stack.GetFrame(1);
+                var stackFrame = new StackTrace(true).GetFrame(1);
                 callerClass = stackFrame.GetMethod().DeclaringType.FullName;
                 callerMethod = stackFrame.GetMethod().Name;
                 callerLineNumber = stackFrame.GetFileLineNumber();
@@ -163,7 +159,7 @@ namespace Cartographer
             // seperate file from path
             var file = filepath.Split('\\').Last();
             var dir = filepath.Substring(0, filepath.Length - file.Length);
-            
+
             // check for dir
             if (!Directory.Exists(dir))
             {
