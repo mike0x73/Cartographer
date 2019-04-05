@@ -11,7 +11,7 @@ namespace Cartographer
         private BlockingCollection<LogMessage> _loggerQueue;
         private StreamWriter _logWriter;
         private readonly Cartographer _cartographer;
-        
+
         public Printer(Cartographer cartographer, BlockingCollection<LogMessage> loggerQueue, string filepath)
         {
             _loggerQueue = loggerQueue;
@@ -52,7 +52,7 @@ namespace Cartographer
             {
                 logMessage += $"{messageObject.CallerClass}\t";
             }
-            
+
             if (messageObject.CallerMethod != null)
             {
                 logMessage += $"{messageObject.CallerMethod}\t";
@@ -63,10 +63,7 @@ namespace Cartographer
                 logMessage += $"{messageObject.LineNumber}\t";
             }
 
-            if (messageObject.Messages != null)
-            {
-                logMessage += $"{string.Join(", ", messageObject.Messages)}";
-            }                
+            logMessage += $"{string.Join(", ", messageObject.Messages)}";
 
             if (messageObject.Ex != null)
             {

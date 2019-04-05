@@ -44,8 +44,6 @@ namespace Cartographer
             {
                 _printer.QueueChecker();
             });
-
-
         }
 
         /// <inheritdoc />
@@ -56,21 +54,15 @@ namespace Cartographer
                 return;
             }
 
-            string callerClass = null;
-            string callerMethod = null;
-            int? callerLineNumber = null;
-            int? threadId = null;
+            ContextData contextData = null;
 
             if (PrintContextData)
             {
                 var stackFrame = new StackTrace(true).GetFrame(1);
-                callerClass = stackFrame.GetMethod().DeclaringType.FullName;
-                callerMethod = stackFrame.GetMethod().Name;
-                callerLineNumber = stackFrame.GetFileLineNumber();
-                threadId = Thread.CurrentThread.ManagedThreadId;
+                contextData = new ContextData(stackFrame);
             }
 
-            _loggerQueue.TryAdd(new LogMessage(message, loggingLevel, callerClass, callerMethod, callerLineNumber, threadId));
+            _loggerQueue.TryAdd(new LogMessage(message, loggingLevel, contextData));
         }
 
         /// <inheritdoc />
@@ -81,21 +73,15 @@ namespace Cartographer
                 return;
             }
 
-            string callerClass = null;
-            string callerMethod = null;
-            int? callerLineNumber = null;
-            int? threadId = null;
+            ContextData contextData = null;
 
             if (PrintContextData)
             {
                 var stackFrame = new StackTrace(true).GetFrame(1);
-                callerClass = stackFrame.GetMethod().DeclaringType.FullName;
-                callerMethod = stackFrame.GetMethod().Name;
-                callerLineNumber = stackFrame.GetFileLineNumber();
-                threadId = Thread.CurrentThread.ManagedThreadId;
+                contextData = new ContextData(stackFrame);
             }
 
-            _loggerQueue.TryAdd(new LogMessage(messages, loggingLevel, callerClass, callerMethod, callerLineNumber, threadId));
+            _loggerQueue.TryAdd(new LogMessage(messages, loggingLevel, contextData));
         }
 
         /// <inheritdoc />
@@ -106,21 +92,15 @@ namespace Cartographer
                 return;
             }
 
-            string callerClass = null;
-            string callerMethod = null;
-            int? callerLineNumber = null;
-            int? threadId = null;
+            ContextData contextData = null;
 
             if (PrintContextData)
             {
-                var stackFrame = new StackTrace(ex, true).GetFrame(1);
-                callerClass = stackFrame.GetMethod().DeclaringType.FullName;
-                callerMethod = stackFrame.GetMethod().Name;
-                callerLineNumber = stackFrame.GetFileLineNumber();
-                threadId = Thread.CurrentThread.ManagedThreadId;
+                var stackFrame = new StackTrace(true).GetFrame(1);
+                contextData = new ContextData(stackFrame);
             }
 
-            _loggerQueue.TryAdd(new LogMessage(message, loggingLevel, ex, callerClass, callerMethod, callerLineNumber, threadId));
+            _loggerQueue.TryAdd(new LogMessage(message, loggingLevel, ex, contextData));
         }
 
         /// <inheritdoc />
@@ -131,21 +111,15 @@ namespace Cartographer
                 return;
             }
 
-            string callerClass = null;
-            string callerMethod = null;
-            int? callerLineNumber = null;
-            int? threadId = null;
+            ContextData contextData = null;
 
             if (PrintContextData)
             {
                 var stackFrame = new StackTrace(true).GetFrame(1);
-                callerClass = stackFrame.GetMethod().DeclaringType.FullName;
-                callerMethod = stackFrame.GetMethod().Name;
-                callerLineNumber = stackFrame.GetFileLineNumber();
-                threadId = Thread.CurrentThread.ManagedThreadId;
+                contextData = new ContextData(stackFrame);
             }
 
-            _loggerQueue.TryAdd(new LogMessage(messages, loggingLevel, ex, callerClass, callerMethod, callerLineNumber, threadId));
+            _loggerQueue.TryAdd(new LogMessage(messages, loggingLevel, ex, contextData));
         }
 
         /// <inheritdoc />
