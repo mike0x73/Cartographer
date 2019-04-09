@@ -23,18 +23,30 @@ namespace Cartographer
         bool PrintContextData { get; set; }
 
         /// <summary>
+        /// Gets and sets whether to use a stacktrace to gather context data. This can be useful for debugging release builds to see how 
+        /// your program has been optimised. Will decrease performance.
+        /// </summary>
+        bool UseStackTrace { get; set; }
+
+        /// <summary>
         /// Prints a log message.
         /// </summary>
         /// <param name="message">The message to log.</param>
         /// <param name="loggingLevel">The logging level of the message</param>
-        void Log(string message, LoggingLevel loggingLevel);
+        void Log(string message, LoggingLevel loggingLevel,
+            [System.Runtime.CompilerServices.CallerFilePath] string classFilePath = null,
+            [System.Runtime.CompilerServices.CallerMemberName] string methodName = null,
+            [System.Runtime.CompilerServices.CallerLineNumber] int? lineNumber = null);
 
         /// <summary>
         /// Prints a log message that contains several messages.
         /// </summary>
         /// <param name="messages">The messages to log.</param>
         /// <param name="loggingLevel">The logging level of the message.</param>
-        void Log(string[] messages, LoggingLevel loggingLevel);
+        void Log(string[] messages, LoggingLevel loggingLevel,
+            [System.Runtime.CompilerServices.CallerFilePath] string classFilePath = null,
+            [System.Runtime.CompilerServices.CallerMemberName] string methodName = null,
+            [System.Runtime.CompilerServices.CallerLineNumber] int? lineNumber = null);
 
         /// <summary>
         /// Prints a log message with an exception stack trace.
@@ -42,7 +54,10 @@ namespace Cartographer
         /// <param name="message">The message to log.</param>
         /// <param name="loggingLevel">The logging level of the message.</param>
         /// <param name="ex">The exception to log.</param>
-        void Log(string message, LoggingLevel loggingLevel, Exception ex);
+        void Log(string message, LoggingLevel loggingLevel, Exception ex,
+            [System.Runtime.CompilerServices.CallerFilePath] string classFilePath = null,
+            [System.Runtime.CompilerServices.CallerMemberName] string methodName = null,
+            [System.Runtime.CompilerServices.CallerLineNumber] int? lineNumber = null);
 
 
         /// <summary>
@@ -51,7 +66,10 @@ namespace Cartographer
         /// <param name="messages">The messages to log.</param>
         /// <param name="loggingLevel">The logging level of the message.</param>
         /// <param name="ex">The exception to log.</param>
-        void Log(string[] messages, LoggingLevel loggingLevel, Exception ex);
+        void Log(string[] messages, LoggingLevel loggingLevel, Exception ex,
+            [System.Runtime.CompilerServices.CallerFilePath] string classFilePath = null,
+            [System.Runtime.CompilerServices.CallerMemberName] string methodName = null,
+            [System.Runtime.CompilerServices.CallerLineNumber] int? lineNumber = null);
 
         /// <summary>
         /// Gets the current status of the logger task.

@@ -29,6 +29,9 @@ namespace Cartographer
         /// <inheritdoc />
         public bool PrintContextData { get; set; } = true;
 
+        /// <inheritdoc />
+        public bool UseStackTrace { get; set; } = false;
+
         /// <summary>
         /// Sets up a new Cartographer to log anything. Spawns a new task in the background.
         /// It will try to create any directories and the log file if it does not already exist.
@@ -47,7 +50,10 @@ namespace Cartographer
         }
 
         /// <inheritdoc />
-        public void Log(string message, LoggingLevel loggingLevel)
+        public void Log(string message, LoggingLevel loggingLevel,
+            [System.Runtime.CompilerServices.CallerFilePath] string classFilePath = null,
+            [System.Runtime.CompilerServices.CallerMemberName] string methodName = null,
+            [System.Runtime.CompilerServices.CallerLineNumber] int? lineNumber = null)
         {
             if (loggingLevel < LoggingLevelToPrint)
             {
@@ -56,17 +62,25 @@ namespace Cartographer
 
             ContextData contextData = null;
 
-            if (PrintContextData)
+            if (PrintContextData && UseStackTrace)
             {
                 var stackFrame = new StackTrace(true).GetFrame(1);
                 contextData = new ContextData(stackFrame);
+            }
+
+            if (PrintContextData && UseStackTrace == false)
+            {
+                contextData = new ContextData(classFilePath, methodName, lineNumber);
             }
 
             _loggerQueue.TryAdd(new LogMessage(message, loggingLevel, contextData));
         }
 
         /// <inheritdoc />
-        public void Log(string[] messages, LoggingLevel loggingLevel)
+        public void Log(string[] messages, LoggingLevel loggingLevel,
+            [System.Runtime.CompilerServices.CallerFilePath] string classFilePath = null,
+            [System.Runtime.CompilerServices.CallerMemberName] string methodName = null,
+            [System.Runtime.CompilerServices.CallerLineNumber] int? lineNumber = null)
         {
             if (loggingLevel < LoggingLevelToPrint)
             {
@@ -75,17 +89,25 @@ namespace Cartographer
 
             ContextData contextData = null;
 
-            if (PrintContextData)
+            if (PrintContextData && UseStackTrace)
             {
                 var stackFrame = new StackTrace(true).GetFrame(1);
                 contextData = new ContextData(stackFrame);
+            }
+
+            if (PrintContextData && UseStackTrace == false)
+            {
+                contextData = new ContextData(classFilePath, methodName, lineNumber);
             }
 
             _loggerQueue.TryAdd(new LogMessage(messages, loggingLevel, contextData));
         }
 
         /// <inheritdoc />
-        public void Log(string message, LoggingLevel loggingLevel, Exception ex)
+        public void Log(string message, LoggingLevel loggingLevel, Exception ex,
+            [System.Runtime.CompilerServices.CallerFilePath] string classFilePath = null,
+            [System.Runtime.CompilerServices.CallerMemberName] string methodName = null,
+            [System.Runtime.CompilerServices.CallerLineNumber] int? lineNumber = null)
         {
             if (loggingLevel < LoggingLevelToPrint)
             {
@@ -94,17 +116,25 @@ namespace Cartographer
 
             ContextData contextData = null;
 
-            if (PrintContextData)
+            if (PrintContextData && UseStackTrace)
             {
                 var stackFrame = new StackTrace(true).GetFrame(1);
                 contextData = new ContextData(stackFrame);
+            }
+
+            if (PrintContextData && UseStackTrace == false)
+            {
+                contextData = new ContextData(classFilePath, methodName, lineNumber);
             }
 
             _loggerQueue.TryAdd(new LogMessage(message, loggingLevel, ex, contextData));
         }
 
         /// <inheritdoc />
-        public void Log(string[] messages, LoggingLevel loggingLevel, Exception ex)
+        public void Log(string[] messages, LoggingLevel loggingLevel, Exception ex,
+            [System.Runtime.CompilerServices.CallerFilePath] string classFilePath = null,
+            [System.Runtime.CompilerServices.CallerMemberName] string methodName = null,
+            [System.Runtime.CompilerServices.CallerLineNumber] int? lineNumber = null)
         {
             if (loggingLevel < LoggingLevelToPrint)
             {
@@ -113,10 +143,15 @@ namespace Cartographer
 
             ContextData contextData = null;
 
-            if (PrintContextData)
+            if (PrintContextData && UseStackTrace)
             {
                 var stackFrame = new StackTrace(true).GetFrame(1);
                 contextData = new ContextData(stackFrame);
+            }
+
+            if (PrintContextData && UseStackTrace == false)
+            {
+                contextData = new ContextData(classFilePath, methodName, lineNumber);
             }
 
             _loggerQueue.TryAdd(new LogMessage(messages, loggingLevel, ex, contextData));
