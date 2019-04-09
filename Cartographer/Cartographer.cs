@@ -11,7 +11,7 @@ using System.Threading;
 namespace Cartographer
 {
     /// <summary>
-    /// Creates a logger and logger queue for the program.
+    /// Creates a logger. Call Log() to log a message. Optional args can always be ignored.
     /// </summary>
     public class Cartographer : ICartographer
     {
@@ -31,6 +31,8 @@ namespace Cartographer
 
         /// <inheritdoc />
         public bool UseStackTrace { get; set; } = false;
+
+        public int MaxFileSize { get; set; } = 0;
 
         /// <summary>
         /// Sets up a new Cartographer to log anything. Spawns a new task in the background.

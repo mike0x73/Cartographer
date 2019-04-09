@@ -10,13 +10,16 @@ namespace Cartographer
     {
         private BlockingCollection<LogMessage> _loggerQueue;
         private StreamWriter _logWriter;
+        private LogFileChecker _logFileChecker;
         private readonly Cartographer _cartographer;
 
-        public Printer(Cartographer cartographer, BlockingCollection<LogMessage> loggerQueue, string filepath)
+        public Printer(Cartographer cartographer, BlockingCollection<LogMessage> loggerQueue, string filePath)
         {
             _loggerQueue = loggerQueue;
             _cartographer = cartographer;
-            _logWriter = new StreamWriter(filepath, true)
+            _logFileChecker = new LogFileChecker(cartographer, filePath);
+
+            _logWriter = new StreamWriter(filePath, true)
             {
                 AutoFlush = true
             };
@@ -32,6 +35,11 @@ namespace Cartographer
         {
             while (true)
             {
+                if (_logFileChecker.CheckFileRollover())
+                {
+                    _logWriter.Dispose();
+                    _logFileChecker.ManageLogFile();
+                }
                 LogMessage(GetOldestLogMessage());
             }
         }
