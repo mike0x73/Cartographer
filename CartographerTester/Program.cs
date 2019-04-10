@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace CartographerTester
 {
-    class Program
+    public class Program
     {
         static void Main(string[] args)
         {
@@ -15,6 +15,7 @@ namespace CartographerTester
                 PrintContextData = true,
                 PrintToConsole = true,
                 LoggingLevelToPrint = Cartographer.LoggingLevel.Debug,
+                MaxFileSize = 4096,
             };
 
             cartographer.Log("Happy logging", Cartographer.LoggingLevel.Info);

@@ -8,13 +8,15 @@ namespace Cartographer
 {
     internal class Printer
     {
-        private BlockingCollection<LogMessage> _loggerQueue;
+        private readonly BlockingCollection<LogMessage> _loggerQueue;
         private StreamWriter _logWriter;
         private LogFileChecker _logFileChecker;
         private readonly Cartographer _cartographer;
+        private readonly string _filePath;
 
         public Printer(Cartographer cartographer, BlockingCollection<LogMessage> loggerQueue, string filePath)
         {
+            _filePath = filePath;
             _loggerQueue = loggerQueue;
             _cartographer = cartographer;
             _logFileChecker = new LogFileChecker(cartographer, filePath);
@@ -35,11 +37,17 @@ namespace Cartographer
         {
             while (true)
             {
-                if (_logFileChecker.CheckFileRollover())
+                if (_cartographer.MaxFileSize > 0 && _logFileChecker.CheckFileRollover())
                 {
                     _logWriter.Dispose();
                     _logFileChecker.ManageLogFile();
+
+                    _logWriter = new StreamWriter(_filePath, true)
+                    {
+                        AutoFlush = true
+                    };
                 }
+
                 LogMessage(GetOldestLogMessage());
             }
         }

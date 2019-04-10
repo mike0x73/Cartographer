@@ -42,7 +42,7 @@ namespace Cartographer
         public Cartographer(string filepath)
         {
             _filepath = filepath;
-            SetupLogFile(filepath);
+            SetupLogFile(_filepath);
             _printer = new Printer(this, _loggerQueue, _filepath);
 
             _loggerTask = Task.Factory.StartNew(() =>
