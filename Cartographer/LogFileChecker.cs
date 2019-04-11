@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -12,7 +13,6 @@ namespace Cartographer
         private Regex _regexFilter;
         private readonly string _fileExtension;
         private readonly string _fileNameWithoutExtension;
-
 
         internal LogFileChecker(Cartographer cartographer, string filePath)
         {
@@ -42,35 +42,36 @@ namespace Cartographer
             var dirInfo = new DirectoryInfo(Path.GetDirectoryName(_filePath));
             var dirPath = dirInfo.FullName;
 
-            var files = dirInfo.GetFiles().Where(f => PassesFilter(f.Name));
+            var files = GetOrderedFiles(dirInfo);
 
-            // var newFiles = dirInfo.GetFiles();
-            // var files = new List<FileInfo>();
-            // 
-            // foreach(var item in newFiles)
-            // {
-            //     if (PassesFilter(item.Name))
-            //     {
-            //         files.Add(item);
-            //     }
-            // }            
-
-            foreach(var file in files)
+            foreach (var file in files)
             {
-                var name = file.Name;
-                var value = name.Substring(_fileNameWithoutExtension.Length, name.Length - _fileExtension.Length - _fileNameWithoutExtension.Length);
-                int.TryParse(value, out var intNumber);
-                File.Move(file.FullName, dirPath + $"{_fileNameWithoutExtension}" + intNumber + 1 + _fileExtension);
+                var value = file.Substring(_fileNameWithoutExtension.Length, file.Length - _fileExtension.Length - _fileNameWithoutExtension.Length);
+                int.TryParse(value, out var unpaddedLogFileNumber);
+                var paddedLogFileNumber = (unpaddedLogFileNumber + 1).ToString().PadLeft(4, '0');
+                File.Move(Path.Combine(dirPath, file), Path.Combine(dirPath, $"{_fileNameWithoutExtension}" + paddedLogFileNumber + _fileExtension));
             }
 
             // rename file
-            var newZeroFile = dirPath + "\\" + _fileNameWithoutExtension + "0" + _fileExtension;
+            var newZeroFile = Path.Combine(dirPath, _fileNameWithoutExtension + "0000" + _fileExtension);
             File.Move(_filePath, newZeroFile);
         }
 
         private bool PassesFilter(string fileName)
         {
             return _regexFilter.IsMatch(fileName);
+        }
+
+        private string[] GetOrderedFiles(DirectoryInfo dirInfo)
+        {
+            var files = dirInfo.GetFiles()
+                .Where(f => PassesFilter(f.Name))
+                .Select(f => f.Name)
+                .ToArray();
+            
+            Array.Sort(files, (x, y) => string.Compare(x, y));
+            Array.Reverse(files);
+            return files;
         }
     }
 }

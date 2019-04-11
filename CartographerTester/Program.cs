@@ -15,7 +15,8 @@ namespace CartographerTester
                 PrintContextData = true,
                 PrintToConsole = true,
                 LoggingLevelToPrint = Cartographer.LoggingLevel.Debug,
-                MaxFileSize = 4096,
+                MaxFileSize = 2048,
+                UseStackTrace = false,
             };
 
             cartographer.Log("Happy logging", Cartographer.LoggingLevel.Info);
