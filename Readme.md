@@ -35,11 +35,13 @@ and will then increase in numerical value each time you fill a log file. A MaxFi
 If you opt to you the stack trace capability. You may see a decrease in performance as generating a stack trace per log is expensive, Especially if you log aggressively.
 
 The default configuration:
-  PrintToConsole = false;
-  LoggingLevelToPrint = LoggingLevel.Trace;
-  PrintContextData = true;
-  public bool UseStackTrace = false;
-  public int MaxFileSize = 0;
+
+    PrintToConsole = false;
+    LoggingLevelToPrint = LoggingLevel.Trace;
+    PrintContextData = true;
+    public bool UseStackTrace = false;
+    public int MaxFileSize = 0;
+
 
 License
 ----
