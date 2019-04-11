@@ -13,19 +13,21 @@ Cartographer is a logging library designed to log messages asynchronously so tha
 # Usage example:
 Supply a logging location file path, include the file extension, and set your configuration.
 
-    var cartographer = new Cartographer.Cartographer("log_file_location")
-    {
-        LoggingLevelToPrint = LoggingLevel.Debug,
-        PrintContextData = true,
-        UseStackTrace = true,
-        MaxFileSize = 40000000      
-    };
-    
-    cartographer.Log("Your log message", LoggingLevel.Info);
-    
+```c#
+var cartographer = new Cartographer.Cartographer("log_file_location")
+{
+    LoggingLevelToPrint = LoggingLevel.Debug,
+    PrintContextData = true,
+    UseStackTrace = true,
+    MaxFileSize = 40000000      
+};
+cartographer.Log("Your log message", LoggingLevel.Info);
+```    
 Caught an exception?
-    
-    cartographer.Log("Caught an exception", LoggingLevel.Error, exception);
+
+```c#
+cartographer.Log("Caught an exception", LoggingLevel.Error, exception);
+```
 
 You do not need to supply the optional arguments. Cartographer uses callerMember attributes to get the class name, method name and line numbers.
 
@@ -35,12 +37,13 @@ and will then increase in numerical value each time you fill a log file. A MaxFi
 If you opt to you the stack trace capability. You may see a decrease in performance as generating a stack trace per log is expensive, Especially if you log aggressively.
 
 The default configuration:
-
-    PrintToConsole = false;
-    LoggingLevelToPrint = LoggingLevel.Trace;
-    PrintContextData = true;
-    public bool UseStackTrace = false;
-    public int MaxFileSize = 0;
+```
+PrintToConsole = false;
+LoggingLevelToPrint = LoggingLevel.Trace;
+PrintContextData = true;
+UseStackTrace = false;
+MaxFileSize = 0;
+```
 
 
 License
