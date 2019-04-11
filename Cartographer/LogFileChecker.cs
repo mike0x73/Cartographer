@@ -46,9 +46,14 @@ namespace Cartographer
 
             foreach (var file in files)
             {
+                // Get file number
                 var value = file.Substring(_fileNameWithoutExtension.Length, file.Length - _fileExtension.Length - _fileNameWithoutExtension.Length);
                 int.TryParse(value, out var unpaddedLogFileNumber);
+                
+                // increment file number and add padding for easier sorting
                 var paddedLogFileNumber = (unpaddedLogFileNumber + 1).ToString().PadLeft(4, '0');
+                
+                // rename file
                 File.Move(Path.Combine(dirPath, file), Path.Combine(dirPath, $"{_fileNameWithoutExtension}" + paddedLogFileNumber + _fileExtension));
             }
 
@@ -70,6 +75,8 @@ namespace Cartographer
                 .ToArray();
             
             Array.Sort(files, (x, y) => string.Compare(x, y));
+            
+            // Reverse so that incrementing the file number does not overwrite a file with a higher number.
             Array.Reverse(files);
             return files;
         }
