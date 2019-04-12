@@ -23,18 +23,27 @@ var cartographer = new Cartographer.Cartographer("log_file_location")
 };
 cartographer.Log("Your log message", LoggingLevel.Info);
 ```    
+
 Caught an exception?
 
 ```c#
 cartographer.Log("Caught an exception", LoggingLevel.Error, exception);
 ```
 
+Get the Cartographer task status:
+
+```c#
+cartographer.Status();
+```
+
 You do not need to supply the optional arguments. Cartographer uses callerMember attributes to get the class name, method name and line numbers.
+
+You can supply an array of messages and each message will be printed in the same log message, all seperated with a comma.
 
 If you have specified a MaxFileSize, then your log files will rollover, meaning that you logging.txt will become logging0000.txt
 and will then increase in numerical value each time you fill a log file. A MaxFileSize of 0 turns off log file rollover.
 
-If you opt to you the stack trace capability. You may see a decrease in performance as generating a stack trace per log is expensive, Especially if you log aggressively.
+If you opt to use the stack trace capability. You may see a decrease in performance as generating a stack trace per log is expensive, Especially if you log aggressively.
 
 The default configuration:
 ```
