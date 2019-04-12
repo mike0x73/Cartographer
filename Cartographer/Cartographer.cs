@@ -32,7 +32,8 @@ namespace Cartographer
         /// <inheritdoc />
         public bool UseStackTrace { get; set; } = false;
 
-        public int MaxFileSize { get; set; } = 0;
+        /// <inheritdoc />
+        public long MaxFileSize { get; set; } = 0;
 
         /// <summary>
         /// Sets up a new Cartographer to log anything. Spawns a new task in the background.

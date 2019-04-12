@@ -24,9 +24,15 @@ namespace Cartographer
 
         /// <summary>
         /// Gets and sets whether to use a stacktrace to gather context data. This can be useful for debugging release builds to see how 
-        /// your program has been optimised. Will decrease performance.
+        /// your program has been optimised. Will decrease performance (default = false).
         /// </summary>
         bool UseStackTrace { get; set; }
+
+        /// <summary>
+        /// Gets and sets the maximum file size in bytes of the log files. Once the current log file has reached this threshhold, 
+        /// it is deprecated and a new log file is created (default = 0, does not rollover).
+        /// </summary>
+        long MaxFileSize { get; set; }
 
         /// <summary>
         /// Prints a log message.
