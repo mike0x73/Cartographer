@@ -39,8 +39,8 @@ namespace Cartographer
         internal void ManageLogFile()
         {
             // Get all files in directory with logFile name in
-            var dirInfo = new DirectoryInfo(Path.GetDirectoryName(_filePath));
-            var dirPath = dirInfo.FullName;
+            var dirPath = Path.GetDirectoryName(_filePath);
+            var dirInfo = new DirectoryInfo(dirPath);
 
             var files = GetOrderedFiles(dirInfo);
 

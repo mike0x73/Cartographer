@@ -166,12 +166,11 @@ namespace Cartographer
             return _loggerTask.Status;
         }
 
-        private void SetupLogFile(string filepath)
+        private void SetupLogFile(string filePath)
         {
             // seperate file from path
-            var file = filepath.Split('\\').Last();
-            var dir = filepath.Substring(0, filepath.Length - file.Length);
-
+            var dir = Path.GetDirectoryName(filePath);
+            
             // check for dir
             if (!Directory.Exists(dir))
             {
