@@ -47,7 +47,7 @@ namespace Cartographer
             foreach (var file in files)
             {
                 // Get file number
-                var value = file.Substring(_fileNameWithoutExtension.Length + 1, file.Length - _fileExtension.Length - _fileNameWithoutExtension.Length - 1); // Plus 1 for additional .
+                var value = file.Substring(_fileNameWithoutExtension.Length + 1, file.Length - _fileExtension.Length - _fileNameWithoutExtension.Length - 1); // Shift 1 for additional '.'
                 int.TryParse(value, out var unpaddedLogFileNumber);
                 
                 // increment file number and add padding for easier sorting
