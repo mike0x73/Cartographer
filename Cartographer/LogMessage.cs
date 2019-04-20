@@ -12,8 +12,8 @@ namespace Cartographer
             Messages[0] = message;
             Level = loggingLevel;
             Time = DateTime.UtcNow;
-            CallerClass = contextData?.CallerClass;
-            CallerMethod = contextData?.CallerMethod;
+            CallerClass = contextData?.CallerClass.PadRight(16);
+            CallerMethod = contextData?.CallerMethod.PadRight(16);
             LineNumber = contextData?.CallerLineNumber;
             ThreadId = contextData?.ThreadId;
         }
@@ -23,8 +23,8 @@ namespace Cartographer
             Messages = messages;
             Level = loggingLevel;
             Time = DateTime.UtcNow;
-            CallerClass = contextData?.CallerClass;
-            CallerMethod = contextData?.CallerMethod;
+            CallerClass = contextData?.CallerClass.PadRight(16);
+            CallerMethod = contextData?.CallerMethod.PadRight(16);
             LineNumber = contextData?.CallerLineNumber;
             ThreadId = contextData?.ThreadId;
         }
@@ -36,8 +36,8 @@ namespace Cartographer
             Level = loggingLevel;
             Ex = ex;
             Time = DateTime.UtcNow;
-            CallerClass = contextData?.CallerClass;
-            CallerMethod = contextData?.CallerMethod;
+            CallerClass = contextData?.CallerClass.PadRight(16);
+            CallerMethod = contextData?.CallerMethod.PadRight(16);
             LineNumber = contextData?.CallerLineNumber;
             ThreadId = contextData?.ThreadId;
         }
@@ -48,8 +48,8 @@ namespace Cartographer
             Level = loggingLevel;
             Ex = ex;
             Time = DateTime.UtcNow;
-            CallerClass = contextData?.CallerClass;
-            CallerMethod = contextData?.CallerMethod;
+            CallerClass = contextData?.CallerClass.PadRight(16);
+            CallerMethod = contextData?.CallerMethod.PadRight(16);
             LineNumber = contextData?.CallerLineNumber;
             ThreadId = contextData?.ThreadId;
         }

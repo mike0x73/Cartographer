@@ -14,6 +14,9 @@
     <RepositoryUrl>https://github.com/mike0x73/Cartographer</RepositoryUrl>
     <RepositoryType>Github</RepositoryType>
     <PackageId>CartographerLogger</PackageId>
+    <Version>1.2.0</Version>
+    <PackageTags>Logging</PackageTags>
+    <PackageReleaseNotes>Added padding to smaller class and method names for improved lineup of log messages</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
