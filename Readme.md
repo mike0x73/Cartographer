@@ -1,6 +1,8 @@
 # Cartographer
 Cartographer is a lightweight, asynchronous, .Net logging library.
 
+https://www.nuget.org/packages/CartographerLogger/
+
 # Features
 Cartographer is a logging library designed to log messages asynchronously so that it impacts the speed of your code as little as possible.
   - Easily log at any time with context data such as caller class, method, line number and thread ID.
