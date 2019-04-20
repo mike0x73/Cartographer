@@ -22,7 +22,7 @@ namespace Cartographer
             // Generate regex
             _fileExtension = Path.GetExtension(_filePath);
             _fileNameWithoutExtension = Path.GetFileNameWithoutExtension(_filePath);
-            _regexFilter = new Regex($@"({_fileNameWithoutExtension})\d+({_fileExtension})");
+            _regexFilter = new Regex($@"({_fileNameWithoutExtension})\.\d+({_fileExtension})");
         }
 
         internal bool CheckFileRollover()
@@ -47,18 +47,18 @@ namespace Cartographer
             foreach (var file in files)
             {
                 // Get file number
-                var value = file.Substring(_fileNameWithoutExtension.Length, file.Length - _fileExtension.Length - _fileNameWithoutExtension.Length);
+                var value = file.Substring(_fileNameWithoutExtension.Length + 1, file.Length - _fileExtension.Length - _fileNameWithoutExtension.Length - 1); // Plus 1 for additional .
                 int.TryParse(value, out var unpaddedLogFileNumber);
                 
                 // increment file number and add padding for easier sorting
                 var paddedLogFileNumber = (unpaddedLogFileNumber + 1).ToString().PadLeft(4, '0');
                 
                 // rename file
-                File.Move(Path.Combine(dirPath, file), Path.Combine(dirPath, $"{_fileNameWithoutExtension}" + paddedLogFileNumber + _fileExtension));
+                File.Move(Path.Combine(dirPath, file), Path.Combine(dirPath, $"{_fileNameWithoutExtension}" + '.' + paddedLogFileNumber + _fileExtension));
             }
 
             // rename file
-            var newZeroFile = Path.Combine(dirPath, _fileNameWithoutExtension + "0000" + _fileExtension);
+            var newZeroFile = Path.Combine(dirPath, _fileNameWithoutExtension + ".0000" + _fileExtension);
             File.Move(_filePath, newZeroFile);
         }
 
