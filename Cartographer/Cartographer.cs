@@ -35,6 +35,9 @@ namespace Cartographer
         /// <inheritdoc />
         public long MaxFileSize { get; set; } = 0;
 
+        /// <inheritdoc />
+        public int PaddingSize { get; set; } = 16;
+
         /// <summary>
         /// Sets up a new Cartographer to log anything. Spawns a new task in the background.
         /// It will try to create any directories and the log file if it does not already exist.
@@ -76,7 +79,7 @@ namespace Cartographer
                 contextData = new ContextData(classFilePath, methodName, lineNumber);
             }
 
-            _loggerQueue.TryAdd(new LogMessage(message, loggingLevel, contextData));
+            _loggerQueue.TryAdd(new LogMessage(message, loggingLevel, contextData, PaddingSize));
         }
 
         /// <inheritdoc />
@@ -103,7 +106,7 @@ namespace Cartographer
                 contextData = new ContextData(classFilePath, methodName, lineNumber);
             }
 
-            _loggerQueue.TryAdd(new LogMessage(messages, loggingLevel, contextData));
+            _loggerQueue.TryAdd(new LogMessage(messages, loggingLevel, contextData, PaddingSize));
         }
 
         /// <inheritdoc />
@@ -130,7 +133,7 @@ namespace Cartographer
                 contextData = new ContextData(classFilePath, methodName, lineNumber);
             }
 
-            _loggerQueue.TryAdd(new LogMessage(message, loggingLevel, ex, contextData));
+            _loggerQueue.TryAdd(new LogMessage(message, loggingLevel, ex, contextData, PaddingSize));
         }
 
         /// <inheritdoc />
@@ -157,7 +160,7 @@ namespace Cartographer
                 contextData = new ContextData(classFilePath, methodName, lineNumber);
             }
 
-            _loggerQueue.TryAdd(new LogMessage(messages, loggingLevel, ex, contextData));
+            _loggerQueue.TryAdd(new LogMessage(messages, loggingLevel, ex, contextData, PaddingSize));
         }
 
         /// <inheritdoc />

@@ -35,6 +35,11 @@ namespace Cartographer
         long MaxFileSize { get; set; }
 
         /// <summary>
+        /// Get and sets a custom padding size for the output log to use (default = 16). This effects the whitespace after class and method names.
+        /// </summary>
+        int PaddingSize { get; set; }
+
+        /// <summary>
         /// Prints a log message.
         /// </summary>
         /// <param name="message">The message to log.</param>

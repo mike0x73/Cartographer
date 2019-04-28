@@ -6,50 +6,50 @@ namespace Cartographer
 {
     internal class LogMessage
     {
-        internal LogMessage(string message, LoggingLevel loggingLevel, ContextData contextData)
+        internal LogMessage(string message, LoggingLevel loggingLevel, ContextData contextData, int paddingSize)
         {
             Messages = new string[1];
             Messages[0] = message;
             Level = loggingLevel;
             Time = DateTime.UtcNow;
-            CallerClass = contextData?.CallerClass.PadRight(16);
-            CallerMethod = contextData?.CallerMethod.PadRight(16);
+            CallerClass = contextData?.CallerClass.PadRight(paddingSize);
+            CallerMethod = contextData?.CallerMethod.PadRight(paddingSize);
             LineNumber = contextData?.CallerLineNumber;
             ThreadId = contextData?.ThreadId;
         }
 
-        internal LogMessage(string[] messages, LoggingLevel loggingLevel, ContextData contextData)
+        internal LogMessage(string[] messages, LoggingLevel loggingLevel, ContextData contextData, int paddingSize)
         {
             Messages = messages;
             Level = loggingLevel;
             Time = DateTime.UtcNow;
-            CallerClass = contextData?.CallerClass.PadRight(16);
-            CallerMethod = contextData?.CallerMethod.PadRight(16);
+            CallerClass = contextData?.CallerClass.PadRight(paddingSize);
+            CallerMethod = contextData?.CallerMethod.PadRight(paddingSize);
             LineNumber = contextData?.CallerLineNumber;
             ThreadId = contextData?.ThreadId;
         }
 
-        internal LogMessage(string message, LoggingLevel loggingLevel, Exception ex, ContextData contextData)
+        internal LogMessage(string message, LoggingLevel loggingLevel, Exception ex, ContextData contextData, int paddingSize)
         {
             Messages = new string[1];
             Messages[0] = message;
             Level = loggingLevel;
             Ex = ex;
             Time = DateTime.UtcNow;
-            CallerClass = contextData?.CallerClass.PadRight(16);
-            CallerMethod = contextData?.CallerMethod.PadRight(16);
+            CallerClass = contextData?.CallerClass.PadRight(paddingSize);
+            CallerMethod = contextData?.CallerMethod.PadRight(paddingSize);
             LineNumber = contextData?.CallerLineNumber;
             ThreadId = contextData?.ThreadId;
         }
 
-        internal LogMessage(string[] messages, LoggingLevel loggingLevel, Exception ex, ContextData contextData)
+        internal LogMessage(string[] messages, LoggingLevel loggingLevel, Exception ex, ContextData contextData, int paddingSize)
         {
             Messages = messages;
             Level = loggingLevel;
             Ex = ex;
             Time = DateTime.UtcNow;
-            CallerClass = contextData?.CallerClass.PadRight(16);
-            CallerMethod = contextData?.CallerMethod.PadRight(16);
+            CallerClass = contextData?.CallerClass.PadRight(paddingSize);
+            CallerMethod = contextData?.CallerMethod.PadRight(paddingSize);
             LineNumber = contextData?.CallerLineNumber;
             ThreadId = contextData?.ThreadId;
         }
