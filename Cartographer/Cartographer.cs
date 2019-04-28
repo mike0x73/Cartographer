@@ -20,22 +20,36 @@ namespace Cartographer
         private Task _loggerTask;
         private Printer _printer;
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Gets and sets whether to print logging to console (default = false).
+        /// </summary>
         public bool PrintToConsole { get; set; } = false;
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Gets and sets what minimum logging level to print (default = Trace).
+        /// </summary>
         public LoggingLevel LoggingLevelToPrint { get; set; } = LoggingLevel.Trace;
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Gets and sets whether to gather context data. Turn off for faster logging (default = true).
+        /// </summary>
         public bool PrintContextData { get; set; } = true;
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Gets and sets whether to use a stacktrace to gather context data. This can be useful for debugging release builds to see how 
+        /// your program has been optimised. Will decrease performance (default = false).
+        /// </summary>
         public bool UseStackTrace { get; set; } = false;
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Gets and sets the maximum file size in bytes of the log files. Once the current log file has reached this threshhold, 
+        /// it is deprecated and a new log file is created (default = 0, does not rollover).
+        /// </summary>
         public long MaxFileSize { get; set; } = 0;
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Get and sets a custom padding size for the output log to use (default = 16). This effects the whitespace after class and method names.
+        /// </summary>
         public int PaddingSize { get; set; } = 16;
 
         /// <summary>
@@ -55,7 +69,11 @@ namespace Cartographer
             });
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Prints a log message.
+        /// </summary>
+        /// <param name="message">The message to log.</param>
+        /// <param name="loggingLevel">The logging level of the message</param>
         public void Log(string message, LoggingLevel loggingLevel,
             [System.Runtime.CompilerServices.CallerFilePath] string classFilePath = null,
             [System.Runtime.CompilerServices.CallerMemberName] string methodName = null,
@@ -82,7 +100,11 @@ namespace Cartographer
             _loggerQueue.TryAdd(new LogMessage(message, loggingLevel, contextData, PaddingSize));
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Prints a log message that contains several messages.
+        /// </summary>
+        /// <param name="messages">The messages to log.</param>
+        /// <param name="loggingLevel">The logging level of the message.</param>
         public void Log(string[] messages, LoggingLevel loggingLevel,
             [System.Runtime.CompilerServices.CallerFilePath] string classFilePath = null,
             [System.Runtime.CompilerServices.CallerMemberName] string methodName = null,
@@ -109,7 +131,12 @@ namespace Cartographer
             _loggerQueue.TryAdd(new LogMessage(messages, loggingLevel, contextData, PaddingSize));
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Prints a log message with an exception stack trace.
+        /// </summary>
+        /// <param name="message">The message to log.</param>
+        /// <param name="loggingLevel">The logging level of the message.</param>
+        /// <param name="ex">The exception to log.</param>
         public void Log(string message, LoggingLevel loggingLevel, Exception ex,
             [System.Runtime.CompilerServices.CallerFilePath] string classFilePath = null,
             [System.Runtime.CompilerServices.CallerMemberName] string methodName = null,
@@ -136,7 +163,12 @@ namespace Cartographer
             _loggerQueue.TryAdd(new LogMessage(message, loggingLevel, ex, contextData, PaddingSize));
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Prints a log message that contains several messages with an exception stack trace.
+        /// </summary>
+        /// <param name="messages">The messages to log.</param>
+        /// <param name="loggingLevel">The logging level of the message.</param>
+        /// <param name="ex">The exception to log.</param>
         public void Log(string[] messages, LoggingLevel loggingLevel, Exception ex,
             [System.Runtime.CompilerServices.CallerFilePath] string classFilePath = null,
             [System.Runtime.CompilerServices.CallerMemberName] string methodName = null,
@@ -163,7 +195,10 @@ namespace Cartographer
             _loggerQueue.TryAdd(new LogMessage(messages, loggingLevel, ex, contextData, PaddingSize));
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Gets the current status of the logger task.
+        /// </summary>
+        /// <returns>The TaskStatus of the logger task.</returns>
         public TaskStatus Status()
         {
             return _loggerTask.Status;
@@ -171,7 +206,6 @@ namespace Cartographer
 
         private void SetupLogFile(string filePath)
         {
-            // seperate file from path
             var dir = Path.GetDirectoryName(filePath);
             
             // check for dir
