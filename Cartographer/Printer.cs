@@ -10,7 +10,7 @@ namespace Cartographer
     {
         private readonly BlockingCollection<LogMessage> _loggerQueue;
         private StreamWriter _logWriter;
-        private LogFileChecker _logFileChecker;
+        private readonly LogFileChecker _logFileChecker;
         private readonly Cartographer _cartographer;
         private readonly string _filePath;
 
@@ -54,36 +54,36 @@ namespace Cartographer
 
         private void LogMessage(LogMessage messageObject)
         {
-            var logMessage =
-                $"{messageObject.Time.ToShortDateString()}, " +
-                $"{messageObject.Time.TimeOfDay}\t" +
-                $"{messageObject.Level}\t";
+            var logMessage = new StringBuilder(10);
+            logMessage.Append($"{messageObject.Time.ToShortDateString()}, ");
+            logMessage.Append($"{messageObject.Time.TimeOfDay}\t");
+            logMessage.Append($"{messageObject.Level}\t");
 
             if (messageObject.ThreadId != null)
             {
-                logMessage += $"{messageObject.ThreadId}\t";
+                logMessage.Append($"{messageObject.ThreadId}\t");
             }
 
             if (messageObject.CallerClass != null)
             {
-                logMessage += $"{messageObject.CallerClass}\t";
+                logMessage.Append($"{messageObject.CallerClass}\t");
             }
 
             if (messageObject.CallerMethod != null)
             {
-                logMessage += $"{messageObject.CallerMethod}\t";
+                logMessage.Append($"{messageObject.CallerMethod}\t");
             }
 
             if (messageObject.LineNumber != null)
             {
-                logMessage += $"{messageObject.LineNumber}\t";
+                logMessage.Append($"{messageObject.LineNumber}\t");
             }
 
-            logMessage += $"{string.Join(", ", messageObject.Messages)}";
+            logMessage.Append($"{string.Join(", ", messageObject.Messages)}");
 
             if (messageObject.Ex != null)
             {
-                logMessage += "\n\t" + messageObject.Ex.StackTrace;
+                logMessage.Append($"\n{messageObject.Ex.StackTrace}");
             }
 
             _logWriter.WriteLine(logMessage);

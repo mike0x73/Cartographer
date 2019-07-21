@@ -10,7 +10,7 @@ namespace Cartographer
     {
         private readonly string _filePath;
         private readonly Cartographer _cartographer;
-        private Regex _regexFilter;
+        private readonly Regex _regexFilter;
         private readonly string _fileExtension;
         private readonly string _fileNameWithoutExtension;
 
